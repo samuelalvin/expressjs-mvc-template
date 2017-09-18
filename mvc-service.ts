@@ -1,15 +1,18 @@
 import { Express } from "express";
 import * as path from "path";
-import * as vash from "vash";
+import "vash";
+
 import { HomeController } from "./controllers/home-controller";
 
+import { TodoApiController } from "./controllers/api/todo-api-controller";
+
 export class MvcService {
-    constructor(private app: Express) {
-    }
+    constructor(private app: Express) { }
 
     addMVC(): void {
         this.initializeViews();
         this.initializeControllers();
+        this.initializeApiControllers();
     }
 
     private initializeViews(): void {
@@ -18,6 +21,10 @@ export class MvcService {
     }
 
     private initializeControllers(): void {
-        this.app.use("/", new HomeController().router);
+        this.app.use("/", new HomeController().setupRoute());
+    }
+
+    private initializeApiControllers(): void {
+        this.app.use("/api/todos", new TodoApiController().setupRoute());
     }
 }
